@@ -1,6 +1,6 @@
 {
   "name": "gitlimiter",
-  "publisher": "santhoshjames",
+  "publisher": "santhoshjamesc",
   "displayName": "Git Limiter",
   "description": "Nudges you (with sound and bad jokes) to open a PR while it's still small enough to review. Limits files and lines per file, with a status bar meter.",
   "version": "0.1.0",
