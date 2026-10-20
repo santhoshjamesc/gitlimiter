@@ -1,21 +1,194 @@
 {
   "name": "gitlimiter",
-  "displayName": "gitlimiter",
-  "description": "",
-  "version": "0.0.1",
+  "publisher": "santhoshjames",
+  "displayName": "Git Limiter",
+  "description": "Nudges you (with sound and bad jokes) to open a PR while it's still small enough to review. Limits files and lines per file, with a status bar meter.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/santhoshjamesc/gitlimiter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/santhoshjamesc/gitlimiter/issues"
+  },
+  "homepage": "https://github.com/santhoshjamesc/gitlimiter#readme",
+  "author": {
+    "name": "Santhosh James C"
+  },
+  "icon": "media/icon.png",
+  "keywords": [
+    "git",
+    "pull request",
+    "pr",
+    "code review",
+    "small prs",
+    "limit",
+    "reminder",
+    "productivity"
+  ],
+  "galleryBanner": {
+    "color": "#1f2937",
+    "theme": "dark"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false,
+      "description": "Git Limiter runs git in your project folder, so it needs a trusted workspace."
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "Git Limiter needs a real folder on disk with a git repository."
+    }
+  },
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
+    "SCM Providers",
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "gitlimiter.helloWorld",
-        "title": "Hello World"
+        "command": "gitlimiter.showStatus",
+        "title": "Show Change Status",
+        "category": "Git Limiter"
+      },
+      {
+        "command": "gitlimiter.openPullRequest",
+        "title": "Open Pull Request",
+        "category": "Git Limiter"
+      },
+      {
+        "command": "gitlimiter.setLimits",
+        "title": "Set Limits",
+        "category": "Git Limiter"
+      },
+      {
+        "command": "gitlimiter.raiseLimits",
+        "title": "Raise Limits for This Branch (+40%, then +30%, +20%, +10%)",
+        "category": "Git Limiter"
+      },
+      {
+        "command": "gitlimiter.resetRaisedLimits",
+        "title": "Reset Raised Limits",
+        "category": "Git Limiter"
+      },
+      {
+        "command": "gitlimiter.testAlert",
+        "title": "Test Alert (with sound)",
+        "category": "Git Limiter"
+      },
+      {
+        "command": "gitlimiter.refresh",
+        "title": "Refresh",
+        "category": "Git Limiter"
+      }
+    ],
+    "configuration": {
+      "title": "Git Limiter",
+      "properties": {
+        "gitlimiter.maxFiles": {
+          "type": "integer",
+          "default": 10,
+          "minimum": 0,
+          "description": "Alert when your branch has changed this many files compared to the base branch (commits + uncommitted + untracked). 0 turns it off.",
+          "scope": "resource"
+        },
+        "gitlimiter.maxLines": {
+          "type": "integer",
+          "default": 300,
+          "minimum": 0,
+          "description": "Alert when any single file on your branch has this many changed lines (added + removed) compared to the base branch. 0 turns it off.",
+          "scope": "resource"
+        },
+        "gitlimiter.warnAtPercent": {
+          "type": "integer",
+          "default": 80,
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Turn the status bar yellow at this percentage of a limit. 0 turns it off.",
+          "scope": "resource"
+        },
+        "gitlimiter.playSound": {
+          "type": "boolean",
+          "default": true,
+          "description": "Play a sound when a limit is reached."
+        },
+        "gitlimiter.soundRepeat": {
+          "type": "integer",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "description": "How many times the alert sound plays in a row. Raise it for a longer alert."
+        },
+        "gitlimiter.soundFile": {
+          "type": "string",
+          "default": "",
+          "description": "Custom sound file to play instead of the system sound (.aiff/.mp3/.wav on macOS, .wav on Windows, .wav/.oga on Linux)."
+        },
+        "gitlimiter.baseBranch": {
+          "type": "string",
+          "default": "",
+          "description": "Branch your PRs target, e.g. origin/develop. Leave empty to detect it automatically (origin's default branch, then origin/main, origin/master, main, master)."
+        },
+        "gitlimiter.alertImage": {
+          "type": "string",
+          "default": "",
+          "description": "Picture (.png, .gif, .jpg, .webp or .svg) shown in the alert details panel. Use a full path, ~ works. Leave empty for the built-in picture."
+        }
+      }
+    },
+    "walkthroughs": [
+      {
+        "id": "gitlimiter.gettingStarted",
+        "title": "Get started with Git Limiter",
+        "description": "A 2-minute tour. No git knowledge needed.",
+        "steps": [
+          {
+            "id": "meter",
+            "title": "Watch the status bar",
+            "description": "Look at the bottom-left of VS Code. You will see ✅ PR size OK. It turns 👀 yellow, then 🚨 red as your branch grows.",
+            "media": {
+              "markdown": "media/walkthrough/1-meter.md"
+            }
+          },
+          {
+            "id": "test",
+            "title": "Hear what the alert sounds like",
+            "description": "Try the alert now, so it never surprises you later.\n[Test the alert](command:gitlimiter.testAlert)",
+            "media": {
+              "markdown": "media/walkthrough/2-alert.md"
+            },
+            "completionEvents": [
+              "onCommand:gitlimiter.testAlert"
+            ]
+          },
+          {
+            "id": "limits",
+            "title": "Pick your own limits",
+            "description": "Choose how big is too big.\n[Set limits](command:gitlimiter.setLimits)",
+            "media": {
+              "markdown": "media/walkthrough/3-limits.md"
+            },
+            "completionEvents": [
+              "onCommand:gitlimiter.setLimits"
+            ]
+          },
+          {
+            "id": "pr",
+            "title": "Open a PR when it nags you",
+            "description": "Click Open PR 🚀 on the alert.\n[Open Pull Request](command:gitlimiter.openPullRequest)",
+            "media": {
+              "markdown": "media/walkthrough/4-pr.md"
+            }
+          }
+        ]
       }
     ]
   },
@@ -28,18 +201,18 @@
     "package": "npm run check-types && node esbuild.js --production",
     "check-types": "tsc --noEmit",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "vsce:package": "vsce package"
   },
   "devDependencies": {
-    "@types/vscode": "^1.90.0",
     "@types/node": "20.x",
+    "@types/vscode": "^1.90.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
-    "eslint": "^9.0.0",
+    "@vscode/vsce": "^3.0.0",
     "esbuild": "^0.24.0",
+    "eslint": "^9.0.0",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.5.0",
-    "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.0"
+    "typescript-eslint": "^8.0.0"
   }
 }

@@ -1,0 +1,10 @@
+# Git Limiter
+
+> VS Code extension that alerts you (sound + status bar) when your git branch grows past a file-count or per-file line limit, so you open a pull request while it is still small enough to review.
+
+- Extension id: <publisher>.gitlimiter (publisher set in package.json)
+- Repository: https://github.com/santhoshjamesc/gitlimiter
+- Full manual, settings, commands and measurement rules: README.md (section "Reference for AI assistants")
+- Settings: gitlimiter.maxFiles, maxLines, warnAtPercent, baseBranch, playSound, soundRepeat, soundFile, alertImage
+- Commands: gitlimiter.showStatus, openPullRequest, setLimits, raiseLimits, resetRaisedLimits, testAlert, refresh
+- Local only: runs git on your machine, no telemetry, no network calls.
